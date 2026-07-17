@@ -5,6 +5,11 @@ convention decision, URDF preprocessing task, typed interfaces, conventions
 section, closed-loop parity testing, external-wrench primitive moved to Phase 2,
 config dataclasses from the start, per-controller control rates.*
 
+Part of the document set: [requirements.md](requirements.md) (what/why, REQ-IDs) →
+[design.md](design.md) (how, DD-IDs) → [verification.md](verification.md)
+(proof, TC-IDs + traceability matrix) → **plan.md** (when/order). Phase exits are
+gated by the L3/L4 test cases mapped to each phase in verification.md §3.
+
 ## Goal
 
 Evolve this repo from two standalone demo scripts into an **experimental simulation
