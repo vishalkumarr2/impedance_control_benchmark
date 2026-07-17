@@ -30,6 +30,14 @@ open_viewer = (
 )
 
 robot = example_robot_data.load("ur5")
+# loadViewerModel() below always loads collision_model geometry (large capsule/
+# sphere primitives approximating each link) alongside the visual mesh, then
+# tries to hide it via a "visible=false" property on the group. That property
+# is correctly stored server-side but isn't reliably honored by the meshcat.js
+# client on (re)connect, so the collision shapes render as floating extra blobs
+# next to the real arm. Drop the collision model so there's nothing to load or
+# hide in the first place; nothing in this script uses collision geometry.
+robot.collision_model = None
 viz = MeshcatVisualizer()
 
 robot.setVisualizer(viz)
