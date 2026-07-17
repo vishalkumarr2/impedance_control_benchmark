@@ -1,0 +1,5 @@
+pin==4.1.0
+example-robot-data-loaders==5.0.0
+numpy==2.5.1
+matplotlib==3.11.0
+meshcat==0.3.2

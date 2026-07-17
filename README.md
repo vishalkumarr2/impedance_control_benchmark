@@ -13,12 +13,16 @@ The aim is to increase the reachability using this programming language without 
 
 The source code was developed on Ubuntu 22.04 with:
 
-1. Python 3.10
-2. [Pinocchio](https://stack-of-tasks.github.io/pinocchio/download.html#Install_1) 2.6.20
-3. Matplotlib 3.6.2
-4. Numpy 1.23.5
+1. Python 3.12
+2. [Pinocchio](https://github.com/stack-of-tasks/pinocchio) (`pin` on PyPI) 4.1.0
+3. Matplotlib 3.11.0
+4. Numpy 2.5.1
 
-Versions are recommended, but not strictly.
+Versions are recommended, but not strictly. Install them via:
+```sh
+pip install -r requirements.txt
+```
+
 Once installed these dependencies, clone the repo:
 ```sh
 git clone git@github.com:leggedrobotics-usp/impedance_control_benchmark.git
