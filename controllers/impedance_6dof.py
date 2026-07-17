@@ -12,6 +12,7 @@
 # GNU General Public License for more details.
 
 import atexit
+from pathlib import Path
 import pinocchio as pin
 import numpy as np
 import time as tm
@@ -22,6 +23,34 @@ from pinocchio.visualize import MeshcatVisualizer
 import example_robot_data
 
 
+def _patch_meshcat_viewer_bundle():
+    """Fix partial mesh rendering in the meshcat.js bundled with meshcat 0.3.2.
+
+    Its merge_geometries() flattens a multi-mesh Collada scene into one Mesh,
+    pushing each sub-mesh's material into a flat list. A sub-mesh with several
+    material primitives (all UR5 visual DAEs have these) contributes a *nested
+    array* to that list, and three.js silently skips geometry groups whose
+    material slot is an array — links lose their joint housings and render as
+    scattered fragments. Flatten to the first material so every group draws.
+    Patches the installed bundle in place; idempotent, and a no-op if the
+    bundle doesn't match (e.g. once meshcat ships a fixed viewer).
+    """
+    import meshcat
+
+    bundle = Path(meshcat.__file__).parent / "viewer" / "dist" / "main.min.js"
+    broken = "i.push(t.geometry),n.push(t.material)"
+    fixed = "i.push(t.geometry),n.push(Array.isArray(t.material)?t.material[0]:t.material)"
+    try:
+        src = bundle.read_text()
+        if broken in src:
+            bundle.write_text(src.replace(broken, fixed))
+    except OSError as exc:
+        print(f"warning: could not patch meshcat viewer bundle ({exc}); "
+              "robot meshes may render partially")
+
+
+_patch_meshcat_viewer_bundle()
+
 controller = 4  # Choose the impedance controller
 plotting = False  # dismiss plot if false
 savefile = False  # dismiss log save if false
@@ -30,13 +59,8 @@ open_viewer = (
 )
 
 robot = example_robot_data.load("ur5")
-# loadViewerModel() below always loads collision_model geometry (large capsule/
-# sphere primitives approximating each link) alongside the visual mesh, then
-# tries to hide it via a "visible=false" property on the group. That property
-# is correctly stored server-side but isn't reliably honored by the meshcat.js
-# client on (re)connect, so the collision shapes render as floating extra blobs
-# next to the real arm. Drop the collision model so there's nothing to load or
-# hide in the first place; nothing in this script uses collision geometry.
+# The demo doesn't use collision geometry; drop it so loadViewerModel() has
+# nothing extra to load and the viewer scene stays lean.
 robot.collision_model = None
 viz = MeshcatVisualizer()
 
