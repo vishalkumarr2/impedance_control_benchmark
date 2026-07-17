@@ -8,6 +8,7 @@ Rev 1 — 2026-07-17. Part of the document set:
 | [design.md](design.md) | How it is built |
 | [verification.md](verification.md) | How we prove it (test cases + traceability) |
 | [plan.md](plan.md) | In what order (phased implementation schedule) |
+| [execution/](execution/index.md) | Who does it (self-contained work packages WP-01..24 dispatchable to subagents; REQ→WP map in the index) |
 
 ## 1. Purpose & Scope
 

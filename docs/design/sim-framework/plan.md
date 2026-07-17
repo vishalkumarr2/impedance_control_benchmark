@@ -7,8 +7,10 @@ config dataclasses from the start, per-controller control rates.*
 
 Part of the document set: [requirements.md](requirements.md) (what/why, REQ-IDs) →
 [design.md](design.md) (how, DD-IDs) → [verification.md](verification.md)
-(proof, TC-IDs + traceability matrix) → **plan.md** (when/order). Phase exits are
-gated by the L3/L4 test cases mapped to each phase in verification.md §3.
+(proof, TC-IDs + traceability matrix) → **plan.md** (when/order) →
+[execution/](execution/index.md) (dispatchable work packages WP-01..24 for
+subagents, with the dispatch protocol). Phase exits are gated by the L3/L4 test
+cases mapped to each phase in verification.md §3.
 
 ## Goal
 
