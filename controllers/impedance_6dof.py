@@ -11,6 +11,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+import atexit
 import pinocchio as pin
 import numpy as np
 import time as tm
@@ -33,6 +34,16 @@ viz = MeshcatVisualizer()
 
 robot.setVisualizer(viz)
 robot.initViewer(open=open_viewer)
+
+# meshcat-server keeps its scene tree across reconnects (even in a fresh/incognito
+# tab) and its subprocess is never torn down by MeshcatVisualizer/Visualizer.close()
+# (broken upstream: ViewerWindow has no close()), so leftover objects from a prior
+# run/REPL session can silently persist. Clear the scene on every startup, and kill
+# our own server subprocess when this interpreter actually exits (works with `-i`,
+# since it fires on REPL exit, not right after the script body finishes).
+viz.viewer.delete()
+atexit.register(lambda: viz.viewer.window.server_proc and viz.viewer.window.server_proc.terminate())
+
 robot.loadViewerModel()
 NQ, NV = robot.model.nq, robot.model.nv
 end_effector = robot.model.getFrameId("ee_link")
